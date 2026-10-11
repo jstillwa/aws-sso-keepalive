@@ -12,7 +12,7 @@ from .notify import prompt_sso_login
 
 log = logging.getLogger("aws-sso-keepalive")
 
-REFRESH_BUFFER_MINUTES = 15
+REFRESH_BUFFER_MINUTES = 25
 
 
 def get_sso_cache_dir() -> Path:
@@ -110,11 +110,11 @@ def refresh_all() -> int:
     for token in tokens:
         start_url = token.get("startUrl", "unknown")
 
-        # Skip tokens that expired long ago (>1 hour) — their refresh token is likely dead
+        # Skip tokens that expired long ago (>24 hours) — their refresh token is likely dead
         try:
             expires_at = parse_expiry(token["expiresAt"])
             expired_seconds = (datetime.now(timezone.utc) - expires_at).total_seconds()
-            if expired_seconds > 3600:
+            if expired_seconds > 86400:
                 log.debug("Skipping stale token for %s (expired %.0f hours ago).", start_url, expired_seconds / 3600)
                 continue
         except (KeyError, ValueError):

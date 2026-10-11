@@ -52,7 +52,7 @@ def test_refresh_all_skips_stale_tokens(tmp_path):
         "accessToken": "a",
         "refreshToken": "r",
         "startUrl": "https://example.awsapps.com/start",
-        "expiresAt": _iso(datetime.now(timezone.utc) - timedelta(hours=2)),
+        "expiresAt": _iso(datetime.now(timezone.utc) - timedelta(hours=48)),
     }
     _write(tmp_path, "stale.json", long_expired)
 
