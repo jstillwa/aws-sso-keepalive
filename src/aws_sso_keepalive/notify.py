@@ -96,12 +96,11 @@ def _linux_dialog(title: str, message: str) -> bool:
 
 def _windows_dialog(title: str, message: str) -> bool:
     ps_script = (
-        "Add-Type -AssemblyName System.Windows.Forms; "
-        f"$r = [System.Windows.Forms.MessageBox]::Show("
-        f"'{message}', '{title}', 'YesNo', 'Warning'); "
-        f"if ($r -eq 'Yes') {{ exit 0 }} else {{ exit 1 }}"
+        f"$ws = New-Object -ComObject WScript.Shell; "
+        f"$r = $ws.Popup('{message}', 15, '{title}', 4 + 48); "
+        f"if ($r -eq 6) {{ exit 0 }} else {{ exit 1 }}"
     )
-    result = subprocess.run(["powershell", "-Command", ps_script], check=False)
+    result = subprocess.run(["powershell", "-NoProfile", "-Command", ps_script], check=False)
     return result.returncode == 0
 
 

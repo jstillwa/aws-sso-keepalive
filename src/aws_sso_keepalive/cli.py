@@ -11,10 +11,15 @@ from pathlib import Path
 
 from . import DEFAULT_INTERVAL
 
+log_file = Path.home() / ".aws" / "sso-keepalive.log"
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
+    handlers=[
+        logging.StreamHandler(),
+        logging.FileHandler(str(log_file), encoding="utf-8"),
+    ],
 )
 log = logging.getLogger("aws-sso-keepalive")
 
